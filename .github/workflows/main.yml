@@ -38,8 +38,11 @@ jobs:
           run: |
             git config --global --add safe.directory /home/runner/work/pbrtbook/pbrtbook
             ./cp.sh
-            BOOK_PATH="$(git describe --tags --abbrev=0)-$(git rev-parse --short HEAD).pdf"
-            mv main.pdf ${BOOK_PATH}
+            # 处理没有标签的情况
+            TAG=$(git describe --tags --abbrev=0 2>/dev/null || echo "untagged")
+            COMMIT=$(git rev-parse --short HEAD)
+            BOOK_PATH="${TAG}-${COMMIT}.pdf"
+            mv main.pdf "${BOOK_PATH}"
             echo "BOOK_PATH=${BOOK_PATH}" >> ${GITHUB_ENV}
       - name: upload
         uses: actions/upload-artifact@v4

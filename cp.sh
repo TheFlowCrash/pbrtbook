@@ -1,4 +1,5 @@
-git describe --tags --abbrev=0
+# 处理没有标签的情况
+git describe --tags --abbrev=0 2>/dev/null || echo "No tags found"
 git rev-parse HEAD
 
 hash_commit=$(git rev-parse --short HEAD)
